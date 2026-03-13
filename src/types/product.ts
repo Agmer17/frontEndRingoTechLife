@@ -27,7 +27,7 @@ export interface Product {
     product_is_featured: boolean;
     product_weight: number | null;
     product_images: ProductImage[];
-    category: Category;
+    category?: Category | null;
     product_created_at: string;
 }
 
@@ -69,7 +69,7 @@ export const ProducterrorKeyMap: Record<string, string> = {
 
 
 export interface UpdateProductRequest {
-    product_category_id?: string;
+    product_category_id?: string | null;
     product_name?: string;
     product_slug?: string;
     product_description?: string;
@@ -126,7 +126,7 @@ export interface ProductDetailResponse {
     product_is_featured: boolean
     product_weight?: number | null
     product_images: ProductImage[]
-    category: Category
+    category?: Category | null
     product_created_at: string
     reviews: Review[]
 }

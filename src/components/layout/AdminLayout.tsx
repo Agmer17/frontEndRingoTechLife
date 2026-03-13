@@ -11,7 +11,6 @@ import {
     MessageSquare,
     ClipboardList,
     Menu,
-    ArrowLeftCircle,
     ArrowLeft
 } from "lucide-react";
 import { useDispatch } from "react-redux";
@@ -53,7 +52,7 @@ export default function AdminLayout() {
         ${isActive ? "bg-primary text-primary-content font-medium" : "hover:bg-base-300"}`;
 
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col overflow-x-hidden pt-16">
             <Navbar />
 
             <div className="flex flex-1">

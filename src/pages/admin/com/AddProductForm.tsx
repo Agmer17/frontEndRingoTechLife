@@ -135,6 +135,7 @@ export default function ProductForm() {
         const response = await createProducts(data)
 
         if (response.success) {
+            showToast("success", response.message)
             setTimeout(() => {
                 navigate("/admin/products/")
             }, 1000)

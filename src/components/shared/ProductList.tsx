@@ -28,6 +28,12 @@ const statusColor: Record<string, string> = {
     out_of_stock: "bg-orange-100 text-orange-700 border-orange-200",
 }
 
+const conditionLabel: Record<string, string> = {
+    new: "Baru",
+    used: "Bekas",
+    refurbished: "Habis Service",
+}
+
 
 
 // Main Page
@@ -118,12 +124,15 @@ export default function ProductListPage({
 
                                         {/* Badges: kategori, kondisi, featured */}
                                         <div className="flex flex-wrap gap-2">
-                                            <span className="badge badge-soft text-xs">
-                                                {product.category.category_name}
-                                            </span>
+                                            {product.category != null && (
+
+                                                <span className="badge badge-soft text-xs">
+                                                    {product.category.category_name}
+                                                </span>
+                                            )}
 
                                             <span className="badge badge-soft text-xs capitalize">
-                                                {product.product_condition}
+                                                {conditionLabel[product.product_condition] ?? product.product_condition}
                                             </span>
 
                                             {product.product_is_featured && (

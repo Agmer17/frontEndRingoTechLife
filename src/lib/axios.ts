@@ -26,15 +26,10 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as CustomAxiosRequestConfig;
-
-    // ❗ kalau bukan 401 langsung reject
     if (error.response?.status !== 401) {
       return Promise.reject(error);
     }
 
-    // ❗ jangan retry kalau:
-    // - sudah pernah retry
-    // - endpoint login / register / refresh sendiri
     if (
       originalRequest._retry ||
       originalRequest.url?.includes("/auth/login") ||
@@ -68,7 +63,6 @@ axiosInstance.interceptors.response.use(
     } catch (refreshError) {
       store.dispatch(logout());
 
-      // ❗ jangan pakai redirect() dari react-router di sini
       window.location.href = "/auth/login";
 
       return Promise.reject(refreshError);

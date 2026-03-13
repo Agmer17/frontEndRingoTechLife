@@ -220,9 +220,12 @@ export default function ProductDetail({
 
                         {/* Badges row */}
                         <div className="flex flex-wrap items-center gap-2">
-                            <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 border border-black">
-                                {product.category.category_name}
-                            </span>
+
+                            {product.category?.category_name && (
+                                <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-secondary text-secondary-content border border-black">
+                                    {product.category.category_name}
+                                </span>
+                            )}
                             <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 border border-black capitalize">
                                 {conditionLabel[product.product_condition] ?? product.product_condition}
                             </span>

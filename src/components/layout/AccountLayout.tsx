@@ -33,7 +33,7 @@ export default function AccountLayout() {
             {/* Navbar sudah sticky dari komponennya sendiri */}
             <Navbar />
 
-            <div className="flex flex-1">
+            <div className="flex flex-1 pt-10">
                 {/* === Sidebar Desktop (FIXED) === */}
                 <aside className="hidden md:flex md:w-64 md:fixed top-16 left-0 h-[calc(100vh-4rem)] border-r border-black p-6 flex-col bg-white z-40">
                     {/* Bagian Link Menu */}

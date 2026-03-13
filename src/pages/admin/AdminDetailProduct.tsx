@@ -31,6 +31,8 @@ export default function AdminDetailProducts() {
             if (data.success) {
                 setProduct(data.data)
             }
+
+            console.log(data)
         }
 
         fetchdata()

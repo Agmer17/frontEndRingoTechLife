@@ -11,7 +11,7 @@ const Navbar = () => {
     const role = useSelector((state: RootState) => state.auth.role);
 
     return (
-        <div className="navbar px-4 border-b border-black sticky top-0 z-50 bg-white">
+        <div className="navbar px-4 border-b border-black fixed top-0 left-0 right-0 z-50 bg-white">
             {/* Logo */}
             <div className="navbar-start">
                 <span className="text-xl font-bold text-primary tracking-tight">

@@ -21,7 +21,11 @@ export default function AdminProductsIndex() {
 
     useEffect(() => {
         const fetchData = async () => {
-            await getAllProducts()
+            const res = await getAllProducts()
+
+            if (!res.success) {
+                showToast("error", res.error)
+            }
         }
         fetchData()
     }, [])

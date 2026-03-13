@@ -7,6 +7,19 @@ import { useToast } from "../../hooks/ui/useToast"
 import UpdateReviewModal from "../../components/shared/UpdateReviewModal"
 import { useSelector } from "react-redux"
 import type { RootState } from "../../store/store"
+import ConfirmDialog from "../../components/shared/ConfirmModal"
+
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    Tooltip,
+    ResponsiveContainer,
+    CartesianGrid,
+    Line,
+    LineChart
+} from "recharts";
 
 export default function AdminReviewPage() {
 
@@ -30,6 +43,29 @@ export default function AdminReviewPage() {
     const [selectedReview, setSelectedReview] = useState<Review | null>(null)
     const [editFormReview, setEditFormReview] = useState(false)
 
+    const [selectedDeleteReview, setselectedDeleteReview] = useState<Review | null>(null)
+
+    const ratingDistribution = [1, 2, 3, 4, 5].map((r) => ({
+        rating: r,
+        total: listReviews.filter((rev) => rev.review_rating === r).length
+    }));
+
+    const reviewsPerDay = Object.values(
+        listReviews.reduce((acc, review) => {
+            const date = new Date(review.review_created_at)
+                .toISOString()
+                .slice(0, 10);
+
+            if (!acc[date]) {
+                acc[date] = { date, total: 0 };
+            }
+
+            acc[date].total += 1;
+
+            return acc;
+        }, {} as Record<string, { date: string; total: number }>)
+    );
+
 
     const onDeleteReview = async (review: Review) => {
         const resp = await deleteReview(review.review_id)
@@ -47,6 +83,14 @@ export default function AdminReviewPage() {
 
         if (res.success) {
             showToast("success", res.message)
+            setEditFormReview(false)
+            setSelectedReview(null)
+            const refetchRes = await getAllReview()
+            if (refetchRes.success) {
+                setListReviews(refetchRes.data)
+            }
+
+
         } else {
             showToast("error", res.error)
         }
@@ -88,9 +132,21 @@ export default function AdminReviewPage() {
                 />
             )}
 
+            {selectedDeleteReview != null && (
+                <ConfirmDialog
+                    open={!!selectedDeleteReview}
+                    title="Hapus Produk?"
+                    message={`Review Oleh "${selectedDeleteReview?.user.user_fullname}" akan dihapus.`}
+                    confirmText="Hapus"
+                    variant="error"
+                    onConfirm={() => onDeleteReview(selectedDeleteReview)}
+                    onCancel={() => setselectedDeleteReview(null)}
+                />
+            )}
+
             <div className="flex flex-col gap-4">
                 <div className="w-full flex justify-between items-baseline">
-                    <h2 className="text-2xl font-bold mb-6">Daftar Produk</h2>
+                    <h2 className="text-2xl font-bold mb-6">Daftar Review</h2>
                     <h2 className="badge badge-ghost font-medium">
                         {listReviews.length} total
                     </h2>
@@ -98,6 +154,47 @@ export default function AdminReviewPage() {
             </div>
 
             <div className="divider"></div>
+
+
+            <h2 className="text-xl font-bold mb-6">Analisis Review</h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                {/* Rating Distribution */}
+                <div className="bg-base-100 border border-black rounded-2xl p-4">
+                    <h3 className="font-semibold mb-4">Distribusi Rating</h3>
+
+                    <div className="w-full h-70">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={ratingDistribution}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="rating" />
+                                <YAxis allowDecimals={false} />
+                                <Tooltip />
+                                <Bar dataKey="total" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+                {/* Reviews Trend */}
+                <div className="bg-base-100 border border-black rounded-2xl p-4">
+                    <h3 className="font-semibold mb-4">Tren Review</h3>
+
+                    <div className="w-full h-[280px]">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={reviewsPerDay}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="date" />
+                                <YAxis allowDecimals={false} />
+                                <Tooltip />
+                                <Line type="monotone" dataKey="total" strokeWidth={2} dot />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+            </div>
 
             {listReviews.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-16 text-center gap-4">
@@ -174,7 +271,8 @@ export default function AdminReviewPage() {
                                         onClick={(e) => {
                                             e.preventDefault()
                                             e.stopPropagation()
-                                            // onDeleteReview(review)
+                                            console.log(review)
+                                            setselectedDeleteReview(review)
                                         }}
                                         className="btn btn-ghost btn-xs btn-circle text-error"
                                     >

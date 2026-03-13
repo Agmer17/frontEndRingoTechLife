@@ -280,30 +280,8 @@ export default function UpdateProductForm({
             product_new_images: newImages,
         };
 
-        // ── Console log untuk verifikasi ──
-        console.group("📦 UpdateProductRequest payload");
-        console.log("Form fields:", {
-            product_category_id: data.product_category_id,
-            product_name: data.product_name,
-            product_slug: data.product_slug,
-            product_description: data.product_description,
-            product_brand: data.product_brand,
-            product_condition: data.product_condition,
-            product_sku: data.product_sku,
-            product_price: data.product_price,
-            product_initial_stock: data.product_initial_stock,
-            product_specification: data.product_specification,
-            product_status: data.product_status,
-            product_featured: data.product_featured,
-            product_weight: data.product_weight,
-        });
-        console.log("🗑️  Deleted image IDs:", deletedImageIds);
-        console.log("🔄  Updated image IDs:", updatedImageIds);
-        console.log("🔄  Updated image files:", updatedImageFiles.map((f) => f.name));
-        console.log("🆕  New images:", newImages.map((f) => f.name));
-        console.log("🗂️  Image slots state:", imageSlots);
-        console.groupEnd();
 
+        console.log(data)
         await onSubmit(data);
     };
 
@@ -544,7 +522,7 @@ export default function UpdateProductForm({
                                 value={form.product_category_id || ""}
                                 onChange={(e) => updateForm("product_category_id", e.target.value)}
                             >
-                                <option value="">Pilih Kategori</option>
+                                <option value={""}>Pilih Kategori</option>
                                 {categories.map((cat) => (
                                     <option key={cat.category_id} value={cat.category_id}>
                                         {cat.category_name}

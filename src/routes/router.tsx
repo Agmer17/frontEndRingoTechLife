@@ -18,6 +18,7 @@ import AdminAddProducts from "../pages/admin/AdminAddProducts";
 import AdminUpdateProduct from "../pages/admin/AdminUpdateProducts";
 import AdminDetailProducts from "../pages/admin/AdminDetailProduct";
 import AdminReviewPage from "../pages/admin/AdminReviewPage";
+import AdminCategoryPage from "../pages/admin/AdminCategoriesPage";
 
 export const router = createBrowserRouter([
     {
@@ -98,10 +99,14 @@ export const router = createBrowserRouter([
             path: "products/detail/:slug",
             element: <AdminDetailProducts />
         },
-
         {
             path: "reviews",
             element: <AdminReviewPage />
+        },
+
+        {
+            path: "categories",
+            element: <AdminCategoryPage />
         }
 
         ]
