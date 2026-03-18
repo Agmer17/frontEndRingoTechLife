@@ -19,12 +19,21 @@ import AdminUpdateProduct from "../pages/admin/AdminUpdateProducts";
 import AdminDetailProducts from "../pages/admin/AdminDetailProduct";
 import AdminReviewPage from "../pages/admin/AdminReviewPage";
 import AdminCategoryPage from "../pages/admin/AdminCategoriesPage";
+import OrdersPage from "../pages/admin/AdminOrderPages";
+import AdminOrderDetails from "../pages/admin/AdminOrderDetails";
+import UserDetailTransacion from "../pages/user/UserDetailTransaction";
+import GenerateOrderPages from "../pages/order/GenerateOrderPage";
 
 export const router = createBrowserRouter([
     {
         path: "/",
         element: <MainLayout />,
-        index: true,
+        children: [
+            {
+                path: "/create-order/:id",
+                element: <GenerateOrderPages />
+            },
+        ]
     },
     {
         path: "/auth",
@@ -58,6 +67,11 @@ export const router = createBrowserRouter([
             {
                 path: "transactions",
                 element: <MyTransactions />
+            },
+
+            {
+                path: "transactions/:id",
+                element: <UserDetailTransacion />
             }
 
         ]
@@ -107,6 +121,15 @@ export const router = createBrowserRouter([
         {
             path: "categories",
             element: <AdminCategoryPage />
+        },
+        {
+            path: "orders",
+            element: <OrdersPage />
+        },
+
+        {
+            path: "orders/:id",
+            element: <AdminOrderDetails />
         }
 
         ]

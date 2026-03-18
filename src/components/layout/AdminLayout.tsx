@@ -41,7 +41,6 @@ export default function AdminLayout() {
         { name: "Kelola User", path: "/admin/users", icon: <Users size={20} /> },
         { name: "Kelola Produk", path: "/admin/products", icon: <Package size={20} /> },
         { name: "Kelola Kategori", path: "/admin/categories", icon: <Layers size={20} /> },
-        { name: "Kelola Transaksi", path: "/admin/transactions", icon: <CreditCard size={20} /> },
         { name: "Kelola Order", path: "/admin/orders", icon: <ShoppingBag size={20} /> },
         { name: "Kelola Review", path: "/admin/reviews", icon: <MessageSquare size={20} /> },
         { name: "Kelola Payment", path: "/admin/payments", icon: <ClipboardList size={20} /> },

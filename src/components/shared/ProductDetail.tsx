@@ -4,6 +4,7 @@ import type { ProductDetailResponse } from "../../types/product"
 import AddReviewModal from "./AddReviewFormModal";
 import type { CreateReviewRequest, Review, UpdateReviewRequest } from "../../types/review";
 import UpdateReviewModal from "./UpdateReviewModal";
+import { Link } from "react-router";
 
 
 interface Props {
@@ -152,7 +153,7 @@ export default function ProductDetail({
                     <div className="lg:w-105 shrink-0 p-5 flex flex-col gap-3 border-b lg:border-b-0 lg:border-r border-gray-100">
 
                         {/* Primary image */}
-                        <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-50 border border-gray-100 group">
+                        <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-50 border border-black group">
                             {primaryUrl ? (
                                 <img
                                     src={primaryUrl}
@@ -321,6 +322,20 @@ export default function ProductDetail({
                             </div>
                         )}
 
+                        {product.product_status != "active" ? (
+                            <button
+                                disabled
+                                className="w-full btn btn-lg btn-disabled cursor-not-allowed"
+                            >
+                                Beli Sekarang
+                            </button>
+                        ) : (
+                            <Link to={"/create-order/" + product.product_id} className="w-full">
+                                <div className="w-full btn btn-primary btn-lg hover:btn-secondary">
+                                    Beli Sekarang
+                                </div>
+                            </Link>
+                        )}
                     </div>
                 </div>
             </div>

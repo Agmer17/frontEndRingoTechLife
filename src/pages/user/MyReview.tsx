@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Star, Clock, User, Pencil, Trash2 } from "lucide-react";
-import StarRatingInput from "../../components/shared/StarRatingInput";
 import { useToast } from "../../hooks/ui/useToast";
 import { Toast } from "../../components/shared/Toast";
 import ConfirmDialog from "../../components/shared/ConfirmModal";

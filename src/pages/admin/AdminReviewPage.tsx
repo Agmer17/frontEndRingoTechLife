@@ -171,7 +171,7 @@ export default function AdminReviewPage() {
                                 <XAxis dataKey="rating" />
                                 <YAxis allowDecimals={false} />
                                 <Tooltip />
-                                <Bar dataKey="total" />
+                                <Bar dataKey="total" fill="#1F2A54" />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
@@ -188,7 +188,7 @@ export default function AdminReviewPage() {
                                 <XAxis dataKey="date" />
                                 <YAxis allowDecimals={false} />
                                 <Tooltip />
-                                <Line type="monotone" dataKey="total" strokeWidth={2} dot />
+                                <Line type="monotone" dataKey="total" strokeWidth={2} dot fill="#1F2A54" />
                             </LineChart>
                         </ResponsiveContainer>
                     </div>

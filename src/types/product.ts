@@ -18,12 +18,12 @@ export interface Product {
     product_slug: string;
     product_description: string;
     product_brand: string;
-    product_condition: string;
+    product_condition: ProductCondition;
     product_price: number;
     product_stock: number;
     product_sku: string;
     product_specification: Record<string, string>;
-    product_status: string;
+    product_status: ProductStatus;
     product_is_featured: boolean;
     product_weight: number | null;
     product_images: ProductImage[];
@@ -130,3 +130,7 @@ export interface ProductDetailResponse {
     product_created_at: string
     reviews: Review[]
 }
+
+
+export type ProductCondition = "new" | "used" | "refurbished"
+export type ProductStatus = "inactive" | "active" | "out_of_stock" | "draft"

@@ -1,52 +1,58 @@
+import type { Payment } from "./payment"
+
+export type OrderStatus =
+    | "pending"
+    | "waiting_confirmation"
+    | "confirmed"
+    | "cancelled"
+
+
 export interface OrderItem {
-    id: string;
-    order_id: string;
-    product_id: string;
+    id: string
+    order_id: string
+    product_id: string
 
-    product_name: string;
-    product_sku?: string;
-    price_at_purchase: number;
-    quantity: number;
-    subtotal: number;
+    product_name: string
+    product_sku?: string | null
 
-    created_at: string;
+    price_at_purchase: number
+    quantity: number
+    subtotal: number
+
+    created_at: string
 }
 
-export interface Payment {
-    id: string;
-    order_id: string;
-    status: string;
-    amount: number;
-
-    proof_image?: string;
-    admin_note?: string;
-    verified_by?: string;
-
-    created_at: string;
-    updated_at: string;
-    submitted_at?: string;
-    verified_at?: string;
-}
 
 export interface Order {
-    id: string;
-    user_id: string;
-    status: string;
+    id: string
+    user_id: string
 
-    subtotal: number;
-    total_amount: number;
-    notes?: string;
+    status: OrderStatus
 
-    created_at: string;
-    updated_at: string;
-    confirmed_at?: string;
-    cancelled_at?: string;
+    subtotal: number
+    total_amount: number
+    notes?: string | null
 
-    items?: OrderItem[];
-    payment?: Payment;
+    created_at: string
+    updated_at: string
+
+    confirmed_at?: string | null
+    cancelled_at?: string | null
+
+    expires_at: string
+
+    items?: OrderItem[]
+    payment?: Payment | null
 }
 
 export interface OrderResponse {
     data: Order[];
     message: string;
+}
+
+
+export interface CreateOrderRequest {
+    product_id: string
+    product_quantity: number
+    order_notes?: string | null
 }
