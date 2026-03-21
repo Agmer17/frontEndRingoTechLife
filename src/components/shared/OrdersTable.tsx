@@ -17,7 +17,7 @@ export function OrdersTables({ orders, admin = false }: Props) {
                 return { label: "Pending", className: "badge-warning" }
 
             case "waiting_confirmation":
-                return { label: "Waiting Confirmation", className: "badge-info" }
+                return { label: "menunggu konfirmasi", className: "badge-info whitespace-nowrap" }
 
             case "confirmed":
                 return { label: "Confirmed", className: "badge-success" }
@@ -51,7 +51,7 @@ export function OrdersTables({ orders, admin = false }: Props) {
         }
     }
 
-    if (orders.length === 0) {
+    if (orders == null || orders.length === 0) {
         return (
             <div className="text-center py-16 opacity-60">
                 No orders found.
@@ -154,7 +154,7 @@ export function OrdersTables({ orders, admin = false }: Props) {
 
                             {/* FOOTER */}
 
-                            <div className="border-t pt-4 flex justify-between items-center">
+                            <div className="flex flex-col justify-between gap-4 border-t pt-4 md:flex-row md:items-center">
 
                                 <div>
 

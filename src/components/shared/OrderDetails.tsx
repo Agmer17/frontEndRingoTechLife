@@ -2,15 +2,18 @@
 
 import { type Order, type OrderStatus } from "../../types/order"
 import { type PaymentStatus } from "../../types/payment"
-import { Check, X, ZoomOut, ZoomIn } from "lucide-react"
+import { Check, X, ZoomOut, ZoomIn, ShoppingBag } from "lucide-react"
 import { useCountdown } from "../../hooks/timer/useCountdown"
 import { useState } from "react"
+import { PaymentModal } from "./PaymentModal"
+import { usePayments } from "../../hooks/payment/usePayment"
+import { Toast } from "./Toast"
+import { useToast } from "../../hooks/ui/useToast"
+import { useNavigate } from "react-router"
 
 interface Props {
     order: Order
     role: "admin" | "user"
-    onApprove?: () => void
-    onReject?: () => void
 }
 
 // ─── helpers ────────────────────────────────────────────────────────────────
@@ -136,15 +139,72 @@ function Stepper({ status }: { status: OrderStatus }) {
 
 // ─── main component ──────────────────────────────────────────────────────────
 
-export function OrderDetail({ order, role, onApprove, onReject }: Props) {
+export function OrderDetail({ order, role }: Props) {
     const { hours, minutes, seconds, expired } = useCountdown(order.expires_at)
+    const [showPaymentModal, setShowPaymentModal] = useState(false)
+    const { submitPayment, acceptPaymet, rejectPayment } = usePayments()
+    const navigate = useNavigate()
 
     const isPending = order.status === "pending"
     const isWaitingConfirmation = order.status === "waiting_confirmation"
     const isConfirmed = order.status === "confirmed"
     const isCancelled = order.status === "cancelled"
-
     const payStatus = order.payment?.status ?? "unpaid"
+    const { toast, dismissToast, showToast } = useToast();
+
+    const handleSubmitPayment = async (file: File) => {
+        const res = await submitPayment(file, order.id)
+
+        if (res.success) {
+            showToast("success", res.message)
+        } else {
+            showToast("error", res.error)
+        }
+
+        setShowPaymentModal(false)
+        navigate(0)
+    }
+
+    const acceptPaymentHandle = async () => {
+        if (role != "admin" || order.payment == null) {
+            return
+        }
+
+        const res = await acceptPaymet(order.payment.id, null)
+
+        if (res.success) {
+            showToast("success", res.message, {
+                onSuccess: () => {
+                    navigate("/admin/orders")
+                }
+            })
+        } else {
+            showToast("error", res.error)
+
+        }
+
+
+    }
+    const rejectPaymentHandle = async () => {
+        if (role != "admin" || order.payment == null) {
+            return
+        }
+
+        const res = await rejectPayment(order.payment.id, null)
+
+        if (res.success) {
+            showToast("success", res.message, {
+                onSuccess: () => {
+                    navigate("/admin/orders")
+                }
+            })
+        } else {
+            showToast("error", res.error)
+
+        }
+
+
+    }
 
     // show timer only when order is still pending and not yet expired
     const showTimer = isPending && !expired
@@ -189,7 +249,7 @@ export function OrderDetail({ order, role, onApprove, onReject }: Props) {
 
                         <button
                             onClick={() => setPreviewOpen(false)}
-                            className="btn btn-circle btn-sm absolute top-4 right-4 shadow-lg"
+                            className="btn btn-circle btn-sm absolute top-4 right-9 z-[9999] shadow-lg"
                         >
                             <X size={18} />
                         </button>
@@ -239,7 +299,26 @@ export function OrderDetail({ order, role, onApprove, onReject }: Props) {
 
             )}
 
+            <Toast
+                toast={toast}
+                onDismiss={dismissToast}
+                successTitle="Update Berhasil!"
+                errorTitle="Update Gagal"
+            />
+            {showPaymentModal && (
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4 sm:p-6 pb-24 sm:pb-6">
 
+                    <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto">
+                        <PaymentModal
+                            order={order}
+                            isLoading={false}
+                            onSubmit={(file) => handleSubmitPayment(file)}
+                            onClose={() => setShowPaymentModal(false)}
+                        />
+                    </div>
+
+                </div>
+            )}
             {/* ── HEADER ── */}
             <div className="card bg-base-100 border border-base-200 shadow-none">
                 <div className="card-body p-5 pb-0">
@@ -340,7 +419,7 @@ export function OrderDetail({ order, role, onApprove, onReject }: Props) {
                         >
                             {/* initials avatar */}
                             <div className="w-11 h-11 rounded-lg bg-base-200 border border-base-300 flex items-center justify-center text-xs font-medium text-base-content/50 shrink-0 uppercase">
-                                {item.product_name.slice(0, 2)}
+                                <ShoppingBag size={15} />
                             </div>
 
                             <div className="flex-1 min-w-0">
@@ -521,7 +600,11 @@ export function OrderDetail({ order, role, onApprove, onReject }: Props) {
                 <div className="card bg-base-100 border border-base-200 shadow-none">
                     <div className="card-body px-5 py-4">
                         {userCanPay ? (
-                            <button className="btn btn-primary w-full">
+                            <button
+                                onClick={() => {
+                                    setShowPaymentModal(true)
+                                }}
+                                className="btn btn-primary w-full">
                                 Bayar Sekarang
                             </button>
                         ) : isWaitingConfirmation ? (
@@ -551,15 +634,15 @@ export function OrderDetail({ order, role, onApprove, onReject }: Props) {
                         </p>
                         <div className="flex gap-3">
                             <button
-                                className="btn btn-success flex-1"
-                                onClick={onApprove}
+                                className="btn btn-success flex-1 whitespace-nowrap"
+                                onClick={acceptPaymentHandle}
                             >
                                 <Check size={15} />
                                 Setujui Pembayaran
                             </button>
                             <button
                                 className="btn btn-error btn-outline flex-1"
-                                onClick={onReject}
+                                onClick={rejectPaymentHandle}
                             >
                                 <X size={15} />
                                 Tolak

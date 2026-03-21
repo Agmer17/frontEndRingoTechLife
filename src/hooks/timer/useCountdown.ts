@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react"
 
 export function useCountdown(expiresAt: string) {
+    const target = new Date(expiresAt).getTime()
 
     const [timeLeft, setTimeLeft] = useState<number>(
-        new Date(expiresAt.replace("Z", "")).getTime() - Date.now()
+        target - Date.now()
     )
 
     useEffect(() => {
-
         const interval = setInterval(() => {
-            setTimeLeft(new Date(expiresAt).getTime() - Date.now())
+            setTimeLeft(target - Date.now())
         }, 1000)
 
         return () => clearInterval(interval)
-
-    }, [expiresAt])
+    }, [target])
 
     const expired = timeLeft <= 0
 
@@ -23,5 +22,4 @@ export function useCountdown(expiresAt: string) {
     const seconds = Math.max(0, Math.floor((timeLeft / 1000) % 60))
 
     return { hours, minutes, seconds, expired }
-
 }
