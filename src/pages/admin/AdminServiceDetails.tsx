@@ -1,18 +1,19 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import useServiceRequest from "../../hooks/service_request/useServiceRequest";
 import { useEffect, useState } from "react";
 import type { ServiceRequest } from "../../types/serviceRequest";
 import { useToast } from "../../hooks/ui/useToast";
 import { Toast } from "../../components/shared/Toast";
-import ServiceRequestDetailComponent from "../../components/shared/ServiceRequestDetail";
+import ServiceRequestDetailComponent from "../../components/shared/ServiceRequestDetailCom";
 
 export default function AdminServiceDetails() {
     const { id } = useParams()
 
-    const { getById } = useServiceRequest()
+    const { getById, adminQuoteService, adminReject } = useServiceRequest()
     const [data, setData] = useState<ServiceRequest | null>(null)
     const { toast, dismissToast, showToast } = useToast();
     const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
 
@@ -31,22 +32,51 @@ export default function AdminServiceDetails() {
     }, [])
 
 
-    const handleQuote = (payload: {
+    const handleQuote = async (payload: {
         quoted_price: number;
         estimated_duration: number;
         admin_note?: string;
     }) => {
-        console.log("QUOTE SUBMITTED:", payload);
 
-        alert(
-            `Quote:\nHarga: ${payload.quoted_price}\nDurasi: ${payload.estimated_duration} hari\nNote: ${payload.admin_note}`
-        );
+        if (data == null) {
+            return
+        }
+        setLoading(true)
+        const res = await adminQuoteService(data?.id, payload.quoted_price, payload.estimated_duration, payload.admin_note)
+        setLoading(false)
+
+        if (res.success) {
+            showToast("success", "berhasil mengirimkan penawaran ke user", {
+                onSuccess: () => {
+                    navigate("/admin/services")
+                }
+            })
+        } else {
+            showToast("error", res.error)
+        }
+
+
+
     };
 
-    const handleRejectByAdmin = (note: string) => {
-        console.log("ADMIN REJECT:", note);
+    const handleRejectByAdmin = async (note: string) => {
+        if (data == null) {
+            return
+        }
+        setLoading(true)
+        const res = await adminReject(data.id, note)
+        setLoading(false)
 
-        alert(`Rejected with note:\n${note}`);
+        if (res.success) {
+            showToast("success", "berhasil mengirimkan penawaran ke user", {
+                onSuccess: () => {
+                    navigate("/admin/services")
+                }
+            })
+        } else {
+            showToast("error", res.error)
+        }
+
     };
     return (
         <div className="md:p-6">

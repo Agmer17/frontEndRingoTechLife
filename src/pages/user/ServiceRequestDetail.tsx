@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react"
 import useServiceRequest from "../../hooks/service_request/useServiceRequest"
 import type { ServiceRequest } from "../../types/serviceRequest"
-import { useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import { useToast } from "../../hooks/ui/useToast"
 import { Toast } from "../../components/shared/Toast"
-import ServiceRequestDetailComponent from "../../components/shared/ServiceRequestDetail"
+import ServiceRequestDetailComponent from "../../components/shared/ServiceRequestDetailCom"
 
 export default function UserServiceDetails() {
     const { id } = useParams()
 
-    const { getById } = useServiceRequest()
+    const { getById, userDecision } = useServiceRequest()
     const [data, setData] = useState<ServiceRequest | null>(null)
     const { toast, dismissToast, showToast } = useToast();
     const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
 
@@ -30,6 +31,25 @@ export default function UserServiceDetails() {
 
     }, [])
 
+    const onUserDecision = async (con: boolean) => {
+        if (data == null) {
+            return
+        }
+        setLoading(true)
+        const res = await userDecision(data?.id, con)
+        setLoading(false)
+
+        if (res.success) {
+            showToast("success", "berhasil mengirimkan penawaran ke user", {
+                onSuccess: () => {
+                    navigate("/account/services")
+                }
+            })
+        } else {
+            showToast("error", res.error)
+        }
+
+    }
 
     return (
         <div className="md:p-6">
@@ -40,7 +60,7 @@ export default function UserServiceDetails() {
                 errorTitle="Operasi Gagal"
             />
 
-            {data && <ServiceRequestDetailComponent data={data} loading={loading} />}
+            {data && <ServiceRequestDetailComponent data={data} loading={loading} onUserDecision={onUserDecision} />}
         </div>
     )
 }

@@ -155,7 +155,9 @@ function StatusBadge({ label, className }: { label: string; className: string })
 export default function ServiceRequestDetailComponent({ data, loading, isAdmin = false, onQuote, onRejectByAdmin, onUserDecision }: Props) {
     const [index, setIndex] = useState(0);
 
-    const [quotePrice, setQuotePrice] = useState("");
+    const [quotePrice, setQuotePrice] = useState<number | null>(null);
+    const [displayQuote, setDisplayQuote] = useState("")
+
     const [duration, setDuration] = useState("");
     const [note, setNote] = useState("");
     if (loading) {
@@ -171,6 +173,29 @@ export default function ServiceRequestDetailComponent({ data, loading, isAdmin =
     const images = [data.photo_1, data.photo_2, data.photo_3].filter(
         (p): p is string => !!p
     );
+
+    const formatRupiah = (value: number) => {
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0,
+        }).format(value);
+    };
+
+    const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const raw = e.target.value.replace(/\D/g, "");
+
+        if (!raw) {
+            setQuotePrice(null);
+            setDisplayQuote("");
+            return;
+        }
+
+        const numberValue = parseInt(raw, 10);
+
+        setQuotePrice(numberValue);
+        setDisplayQuote(formatRupiah(numberValue));
+    };
 
     const baseUrl = `${import.meta.env.VITE_IMAGE_URL}/device_service`;
     const statusCfg = STATUS_CONFIG[data.status];
@@ -366,10 +391,10 @@ export default function ServiceRequestDetailComponent({ data, loading, isAdmin =
                                                 <div className="grid grid-cols-2 gap-3">
 
                                                     <input
-                                                        type="number"
+                                                        type="text"
                                                         placeholder="Harga"
-                                                        value={quotePrice}
-                                                        onChange={(e) => setQuotePrice(e.target.value)}
+                                                        value={displayQuote}
+                                                        onChange={(e) => handlePriceChange(e)}
                                                         className="input input-sm rounded-none border border-black"
                                                     />
 
@@ -400,14 +425,14 @@ export default function ServiceRequestDetailComponent({ data, loading, isAdmin =
                                                         }
                                                         className="btn btn-success border border-black rounded-none text-sm h-9"
                                                     >
-                                                        Submit Quote
+                                                        Kirim Penawaran
                                                     </button>
 
                                                     <button
                                                         onClick={() => onRejectByAdmin?.(note)}
                                                         className="btn btn-error border border-black rounded-none text-sm h-9"
                                                     >
-                                                        Reject
+                                                        Tolak
                                                     </button>
                                                 </div>
                                             </div>

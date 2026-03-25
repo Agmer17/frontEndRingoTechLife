@@ -14,13 +14,14 @@ export default function OrdersPage() {
     useEffect(() => {
         const fetchAll = async () => {
             const resp = await getAllOrders()
-
             if (resp.success) {
                 if (resp.data == null) {
                     setOrders([])
                     console.log("Masuk ke null nih!")
                 }
                 setOrders(resp.data)
+            } else {
+                setOrders([])
             }
         }
 

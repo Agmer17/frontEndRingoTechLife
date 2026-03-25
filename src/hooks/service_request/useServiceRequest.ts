@@ -81,5 +81,54 @@ export default function useServiceRequest() {
         }
     }
 
-    return { getAll, createNew, getallMyService, getById }
+    const adminQuoteService = async (id: string, quoted_price: number, estimated_duration: number, admin_note?: string) => {
+        try {
+            const response = await axiosInstance.post("/device-service/quote-service/" + id, {
+                quoted_price,
+                estimated_duration,
+                admin_note
+            })
+
+
+            const data = response.data.data
+            const message = response.data.message
+
+            return { success: true as const, message, data }
+        } catch (error) {
+            return handleApiError(error)
+        }
+    }
+
+    const adminReject = async (id: string, admin_note: string) => {
+        try {
+
+            const response = await axiosInstance.put("/device-service/admin-reject/" + id, {
+                admin_note
+            })
+            const data = response.data.data
+            const message = response.data.message
+
+            return { success: true as const, message, data }
+        } catch (error) {
+            return handleApiError(error)
+        }
+
+    }
+
+    const userDecision = async (id: string, accept: boolean) => {
+        try {
+
+            const response = await axiosInstance.put("/device-service/status-service/" + id, {
+                accept
+            })
+            const data = response.data.data
+            const message = response.data.message
+
+            return { success: true as const, message, data }
+        } catch (error) {
+            return handleApiError(error)
+        }
+    }
+
+    return { getAll, createNew, getallMyService, getById, adminQuoteService, adminReject, userDecision }
 }

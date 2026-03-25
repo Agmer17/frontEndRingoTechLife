@@ -28,7 +28,6 @@ import SearchPage from "../pages/home/SearchPage";
 import CreateServiceRequestForm from "../pages/service_request/ServiceRequestFormPage";
 import AdminServiceRequestPage from "../pages/admin/AdminServiceRequestPage";
 import UserServiceRequestPage from "../pages/user/ServiceHistory";
-import ServiceRequestDetail from "../components/shared/ServiceRequestDetail";
 import UserServiceDetails from "../pages/user/ServiceRequestDetail";
 import AdminServiceDetails from "../pages/admin/AdminServiceDetails";
 
@@ -55,6 +54,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/device-service",
+                loader: protectedLoader,
                 element: <CreateServiceRequestForm />
             }
         ]

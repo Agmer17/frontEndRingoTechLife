@@ -54,7 +54,7 @@ export function OrdersTables({ orders, admin = false }: Props) {
     if (orders == null || orders.length === 0) {
         return (
             <div className="text-center py-16 opacity-60">
-                No orders found.
+                Belum ada pesanan
             </div>
         )
     }
