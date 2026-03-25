@@ -8,23 +8,31 @@ import { useToast } from "../../hooks/ui/useToast"
 import { Toast } from "../../components/shared/Toast"
 import { useProducts } from "../../hooks/products/useProducts"
 import ConfirmDialog from "../../components/shared/ConfirmModal"
+import { useCategories } from "../../hooks/Category/useCategory"
+import type { Category } from "../../types/Category"
 
 export default function AdminProductsIndex() {
     const { getAllProducts, listProducts, deleteProducts, setListProducts } = useAdminProducts()
     const { searchProduct } = useProducts()
+    const { getAll: getAllCategories } = useCategories()
     const { toast, dismissToast, showToast } = useToast();
     const navigate = useNavigate()
     const [search, setSearch] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
     const [debouncedSearch, setDebouncedSearch] = useState("");
 
     const [deleteProduct, setDeleteProduct] = useState<Product | null>(null)
+    const [cat, setCat] = useState<Category[]>([])
 
     useEffect(() => {
         const fetchData = async () => {
             const res = await getAllProducts()
-
             if (!res.success) {
                 showToast("error", res.error)
+            }
+            const catRes = await getAllCategories()
+            if (catRes.success) {
+                setCat(catRes.data)
             }
         }
         fetchData()
@@ -39,10 +47,9 @@ export default function AdminProductsIndex() {
         return () => clearTimeout(timer);
     }, [search]);
 
-    // fire search
     useEffect(() => {
-        const fireSearch = async (query: string) => {
-            const res = await searchProduct(query)
+        const fireSearch = async (query: string, categorySlug?: string) => {
+            const res = await searchProduct(query, categorySlug)
 
             if (res.success) {
                 setListProducts(res.data)
@@ -52,12 +59,16 @@ export default function AdminProductsIndex() {
         const fetchData = async () => {
             await getAllProducts()
         }
-        if (debouncedSearch !== "") {
-            fireSearch(search)
+
+        if (debouncedSearch !== "" || selectedCategory) {
+            fireSearch(
+                debouncedSearch,
+                selectedCategory?.category_slug
+            )
         } else {
             fetchData()
         }
-    }, [debouncedSearch]);
+    }, [debouncedSearch, selectedCategory]);
 
     const onEdit = (product: Product) => {
         navigate(`/admin/products/edit/${product.product_id}`)
@@ -120,16 +131,38 @@ export default function AdminProductsIndex() {
                 </div>
 
                 {/* SEARCH */}
-                <label className="input input-bordered flex items-center gap-2 w-full md:w-[40%]">
-                    <Search size={18} className="opacity-60" />
-                    <input
-                        type="text"
-                        className="grow"
-                        placeholder="Cari produk..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-                </label>
+                <div className="flex flex-col md:flex-row gap-2 w-full md:w-[40%]">
+                    {/* SEARCH */}
+                    <label className="input input-bordered flex items-center gap-2 w-full">
+                        <Search size={18} className="opacity-60" />
+                        <input
+                            type="text"
+                            className="grow"
+                            placeholder="Cari produk..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </label>
+
+                    {/* CATEGORY SELECT */}
+                    <select
+                        className="select select-bordered w-full md:w-[50%]"
+                        value={selectedCategory?.category_id || ""}
+                        onChange={(e) => {
+                            const selected = cat.find(c => c.category_id === e.target.value) || null
+                            setSelectedCategory(selected)
+                        }}
+                    >
+                        <option value="">Semua Kategori</option>
+                        {cat.map((c) => (
+                            <option key={c.category_id} value={c.category_id}>
+                                {c.category_name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+
             </div>
 
             <div className="divider"></div>

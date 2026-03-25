@@ -312,16 +312,6 @@ export default function ProductDetail({
                             ))}
                         </div>
 
-                        {/* Description */}
-                        {product.product_description && (
-                            <div className="pt-2 border-t border-gray-100">
-                                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Deskripsi</p>
-                                <p className="text-sm text-gray-600 whitespace-pre-line leading-relaxed">
-                                    {product.product_description}
-                                </p>
-                            </div>
-                        )}
-
                         {product.product_status != "active" ? (
                             <button
                                 disabled
@@ -336,6 +326,17 @@ export default function ProductDetail({
                                 </div>
                             </Link>
                         )}
+                        {/* Description */}
+                        {product.product_description && (
+                            <div className="pt-2 border-t border-gray-100">
+                                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Deskripsi</p>
+                                <p className="text-sm text-gray-600 whitespace-pre-line leading-relaxed">
+                                    {product.product_description}
+                                </p>
+                            </div>
+                        )}
+
+
                     </div>
                 </div>
             </div>

@@ -30,17 +30,17 @@ const Navbar = () => {
                     </li>
 
                     <li>
-                        <a className="flex items-center gap-2">
+                        <Link to={"/search"} className="flex items-center gap-2">
                             <Search size={16} />
-                            Belanja
-                        </a>
+                            Cari barang
+                        </Link>
                     </li>
 
                     <li>
-                        <a className="flex items-center gap-2">
+                        <Link to={"/device-service"} className="flex items-center gap-2">
                             <Wrench size={16} />
                             Repair Device
-                        </a>
+                        </Link>
                     </li>
 
                     {/* ✅ ADMIN MENU */}
@@ -98,17 +98,17 @@ const Navbar = () => {
                         </li>
 
                         <li>
-                            <a className="flex items-center gap-3 min-h-10 leading-none">
-                                <Search className="h-4 w-4" />
-                                <span>Cari Barang</span>
-                            </a>
+                            <Link to={"/search"} className="flex items-center gap-3 min-h-10 leading-none">
+                                <Search size={16} />
+                                Cari barang
+                            </Link>
                         </li>
 
                         <li>
-                            <a className="flex items-center gap-3 min-h-10 leading-none">
-                                <Wrench className="h-4 w-4" />
-                                <span>Service</span>
-                            </a>
+                            <Link to={"/device-service"} className="flex items-center gap-3 min-h-10 leading-none">
+                                <Wrench size={16} />
+                                Repair Device
+                            </Link>
                         </li>
 
                         <li className="border-t border-base-200">

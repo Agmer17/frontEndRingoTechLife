@@ -222,7 +222,7 @@ export function OrderDetail({ order, role }: Props) {
     const showAdminNote = !!order.payment?.admin_note
 
     // bukti bayar: tampil untuk semua role, hanya saat status submitted
-    const showProofImage = (order.payment?.status === "submitted" && !!order.payment?.proof_image) || order.payment?.status == "approved"
+    const showProofImage = (order.payment?.status === "submitted" && !!order.payment?.proof_image) || order.payment?.status == "approved" || order.payment?.status == "rejected"
 
     const [previewOpen, setPreviewOpen] = useState(false)
     const [zoom, setZoom] = useState(1)

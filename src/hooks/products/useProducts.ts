@@ -1,5 +1,5 @@
 import axiosInstance from "../../lib/axios"
-import type { CreateProductRequest, Product, UpdateProductRequest } from "../../types/product"
+import type { CreateProductRequest, Product, ProductHomeData, UpdateProductRequest } from "../../types/product"
 import { handleApiError } from "../../utils/errorUtils"
 
 export function useProducts() {
@@ -189,14 +189,16 @@ export function useProducts() {
         }
     }
 
-    const searchProduct = async (query: string) => {
+    const searchProduct = async (query: string, cat?: string) => {
         try {
-            const response = await axiosInstance.get("/products/search", {
-                params: {
-                    q: query,
-                }
-            })
+            const params: any = {}
 
+            if (query) params.q = query
+            if (cat) params.c = cat
+
+            const response = await axiosInstance.get("/products/search", {
+                params
+            })
 
             const data = response.data.data as Product[]
 
@@ -206,5 +208,19 @@ export function useProducts() {
         }
     }
 
-    return { getAll, create, remove, getById, update, getBySlug, searchProduct }
+
+    const getHomeData = async () => {
+        try {
+
+            const response = await axiosInstance.get("/products/home-data")
+
+            const data = response.data.data as ProductHomeData
+            return { success: true as const, message: "berhasil mengambil data", data }
+
+        } catch (error) {
+            return handleApiError(error)
+        }
+    }
+
+    return { getAll, create, remove, getById, update, getBySlug, searchProduct, getHomeData }
 }

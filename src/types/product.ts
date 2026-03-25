@@ -11,6 +11,19 @@ export interface ProductImage {
     created_at: string;
 }
 
+export interface CategoryProductGroup {
+    category_id: string;
+    category_name: string;
+    category_slug: string;
+    category_description: string;
+    category_created_at: string;
+    products: Product[];
+}
+export interface ProductHomeData {
+    best_seller: Product[]
+    product_data: CategoryProductGroup[]
+}
+
 export interface Product {
     product_id: string;
     product_category_id: string;

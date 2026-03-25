@@ -1,6 +1,6 @@
 import { Outlet, NavLink, useNavigate } from "react-router";
 import Navbar from "../shared/Navbar";
-import { Receipt, Star, ShoppingCart, LogOut } from "lucide-react";
+import { Receipt, Star, ShoppingCart, LogOut, Wrench } from "lucide-react";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../store/store";
 import { logout } from "../../store/slieces/authslice";
@@ -20,13 +20,6 @@ export default function AccountLayout() {
     const navStyle = ({ isActive }: { isActive: boolean }) =>
         `flex items-center gap-3 p-3 rounded-lg transition-all
         ${isActive ? "bg-primary text-primary-content font-medium" : "hover:bg-base-300"}`;
-
-    const bottomNavStyle = ({ isActive }: { isActive: boolean }) =>
-        `flex flex-col items-center text-sm py-1 px-2 rounded-lg transition-all
-   ${isActive
-            ? "bg-primary text-primary-content"
-            : "text-base-content opacity-70"
-        }`;
 
     return (
         <div className="flex flex-col min-h-screen bg-white">
@@ -48,9 +41,9 @@ export default function AccountLayout() {
                             <span>Reviews</span>
                         </NavLink>
 
-                        <NavLink to="/account/cart" className={navStyle}>
-                            <ShoppingCart size={20} />
-                            <span>Cart</span>
+                        <NavLink to="/account/services" className={navStyle}>
+                            <Wrench size={20} />
+                            <span>service</span>
                         </NavLink>
                     </div>
 
@@ -104,14 +97,14 @@ export default function AccountLayout() {
                 </NavLink>
 
                 <NavLink
-                    to="/account/cart"
+                    to="/account/services"
                     className={({ isActive }) =>
                         `flex flex-col items-center justify-center text-xs gap-1 transition 
                     ${isActive ? "text-primary" : "text-base-content/70"}`
                     }
                 >
-                    <ShoppingCart size={20} />
-                    <span>Cart</span>
+                    <Wrench size={20} />
+                    <span>service</span>
                 </NavLink>
 
                 <button

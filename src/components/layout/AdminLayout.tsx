@@ -43,7 +43,7 @@ export default function AdminLayout() {
         { name: "Kelola Kategori", path: "/admin/categories", icon: <Layers size={20} /> },
         { name: "Kelola Order", path: "/admin/orders", icon: <ShoppingBag size={20} /> },
         { name: "Kelola Review", path: "/admin/reviews", icon: <MessageSquare size={20} /> },
-        { name: "Kelola Payment", path: "/admin/payments", icon: <ClipboardList size={20} /> },
+        { name: "Kelola Service", path: "/admin/services", icon: <ClipboardList size={20} /> },
     ];
 
     const navStyle = ({ isActive }: { isActive: boolean }) =>

@@ -23,6 +23,14 @@ import OrdersPage from "../pages/admin/AdminOrderPages";
 import AdminOrderDetails from "../pages/admin/AdminOrderDetails";
 import UserDetailTransacion from "../pages/user/UserDetailTransaction";
 import GenerateOrderPages from "../pages/order/GenerateOrderPage";
+import HomePages from "../pages/home/HomePage";
+import SearchPage from "../pages/home/SearchPage";
+import CreateServiceRequestForm from "../pages/service_request/ServiceRequestFormPage";
+import AdminServiceRequestPage from "../pages/admin/AdminServiceRequestPage";
+import UserServiceRequestPage from "../pages/user/ServiceHistory";
+import ServiceRequestDetail from "../components/shared/ServiceRequestDetail";
+import UserServiceDetails from "../pages/user/ServiceRequestDetail";
+import AdminServiceDetails from "../pages/admin/AdminServiceDetails";
 
 export const router = createBrowserRouter([
     {
@@ -30,9 +38,25 @@ export const router = createBrowserRouter([
         element: <MainLayout />,
         children: [
             {
+                index: true,
+                element: <HomePages />
+            },
+            {
                 path: "/create-order/:id",
                 element: <GenerateOrderPages />
             },
+            {
+                path: "products/detail/:slug",
+                element: <AdminDetailProducts />
+            },
+            {
+                path: "search",
+                element: <SearchPage />
+            },
+            {
+                path: "/device-service",
+                element: <CreateServiceRequestForm />
+            }
         ]
     },
     {
@@ -72,6 +96,15 @@ export const router = createBrowserRouter([
             {
                 path: "transactions/:id",
                 element: <UserDetailTransacion />
+            },
+            {
+                path: "services",
+                element: <UserServiceRequestPage />
+            },
+            {
+                path: "services/detail/:id",
+                element: <UserServiceDetails />
+
             }
 
         ]
@@ -130,6 +163,15 @@ export const router = createBrowserRouter([
         {
             path: "orders/:id",
             element: <AdminOrderDetails />
+        },
+
+        {
+            path: "services",
+            element: <AdminServiceRequestPage />
+        },
+        {
+            path: "services/details/:id",
+            element: <AdminServiceDetails />
         }
 
         ]
