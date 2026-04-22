@@ -1,3 +1,5 @@
+import type { User } from "./user";
+
 export interface CreateServiceRequestDTO {
     device_type: string;          // required, max 100
     device_brand?: string;        // optional, max 100
@@ -39,6 +41,7 @@ export interface ServiceRequest {
     updated_at: string;
     quoted_at: string | null;
     decided_at: string | null;
+    user: User
 }
 
 // ─── API Response Wrapper ─────────────────────────────────────────────────────

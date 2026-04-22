@@ -111,6 +111,42 @@ export function OrdersTables({ orders, admin = false }: Props) {
                             </div>
 
 
+                            {/* USER INFO */}
+
+                            {order.user && (
+                                <div className="flex items-center gap-3 p-3 rounded-xl bg-base-200/60">
+
+                                    {order.user.profile_picture ? (
+                                        <img
+                                            src={`${import.meta.env.VITE_IMAGE_URL}/user/${order.user.profile_picture}`}
+                                            alt={order.user.full_name}
+                                            className="w-8 h-8 rounded-full object-cover border border-base-300 shrink-0"
+                                        />
+                                    ) : (
+                                        <div className="w-8 h-8 rounded-full bg-base-300 flex items-center justify-center text-xs font-semibold text-base-content/60 shrink-0 uppercase">
+                                            {order.user.full_name?.charAt(0) ?? "?"}
+                                        </div>
+                                    )}
+
+                                    <div className="min-w-0 flex-1">
+                                        <p className="text-sm font-medium truncate">
+                                            {order.user.full_name}
+                                        </p>
+                                        <p className="text-xs opacity-50 truncate">
+                                            {order.user.email}
+                                        </p>
+                                    </div>
+
+                                    {order.user.phone_number && (
+                                        <p className="text-xs opacity-60 shrink-0">
+                                            {order.user.phone_number}
+                                        </p>
+                                    )}
+
+                                </div>
+                            )}
+
+
                             {/* ITEMS */}
 
                             <div className="space-y-3">

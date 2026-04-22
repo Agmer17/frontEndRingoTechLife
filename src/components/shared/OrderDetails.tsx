@@ -152,6 +152,8 @@ export function OrderDetail({ order, role }: Props) {
     const payStatus = order.payment?.status ?? "unpaid"
     const { toast, dismissToast, showToast } = useToast();
 
+    const [notes, setNotes] = useState("")
+
     const handleSubmitPayment = async (file: File) => {
         const res = await submitPayment(file, order.id)
 
@@ -170,7 +172,7 @@ export function OrderDetail({ order, role }: Props) {
             return
         }
 
-        const res = await acceptPaymet(order.payment.id, null)
+        const res = await acceptPaymet(order.payment.id, notes || "")
 
         if (res.success) {
             showToast("success", res.message, {
@@ -190,7 +192,7 @@ export function OrderDetail({ order, role }: Props) {
             return
         }
 
-        const res = await rejectPayment(order.payment.id, null)
+        const res = await rejectPayment(order.payment.id, notes || "")
 
         if (res.success) {
             showToast("success", res.message, {
@@ -398,6 +400,51 @@ export function OrderDetail({ order, role }: Props) {
                         </div>
                     )}
 
+                </div>
+            </div>
+
+            {/* ── USER INFO ── */}
+            <div className="card bg-base-100 border border-base-200 shadow-none">
+                <div className="card-body p-0">
+
+                    <div className="px-5 pt-4 pb-2">
+                        <h2 className="text-xs font-medium text-base-content/50 uppercase tracking-wide">
+                            Informasi pembeli
+                        </h2>
+                    </div>
+
+                    <div className="divide-y divide-base-200">
+
+                        <div className="flex items-center gap-3 px-5 py-3.5">
+                            {order.user?.profile_picture ? (
+                                <img
+                                    src={`${import.meta.env.VITE_IMAGE_URL}/user/${order.user.profile_picture}`}
+                                    alt={order.user.full_name}
+                                    className="w-10 h-10 rounded-full object-cover border border-base-300 shrink-0"
+                                />
+                            ) : (
+                                <div className="w-10 h-10 rounded-full bg-base-200 border border-base-300 flex items-center justify-center text-sm font-semibold text-base-content/50 shrink-0 uppercase">
+                                    {order.user?.full_name?.charAt(0) ?? "?"}
+                                </div>
+                            )}
+                            <div className="min-w-0">
+                                <p className="text-sm font-medium text-base-content truncate">
+                                    {order.user?.full_name}
+                                </p>
+                                <p className="text-xs text-base-content/50 truncate">
+                                    {order.user?.email}
+                                </p>
+                            </div>
+                        </div>
+
+                        {order.user?.phone_number && (
+                            <div className="flex justify-between items-center px-5 py-3 text-sm">
+                                <span className="text-base-content/60">No. Telepon</span>
+                                <span>{order.user.phone_number}</span>
+                            </div>
+                        )}
+
+                    </div>
                 </div>
             </div>
 
@@ -630,8 +677,17 @@ export function OrderDetail({ order, role }: Props) {
                 <div className="card bg-base-100 border border-base-200 shadow-none">
                     <div className="card-body px-5 py-4">
                         <p className="text-xs font-medium text-base-content/50 uppercase tracking-wide mb-3">
-                            Tindakan admin
+                            Catatan admin
                         </p>
+
+                        {/* TEXTAREA NOTES */}
+                        <textarea
+                            className="textarea textarea-bordered w-full mb-3"
+                            placeholder="Tambahkan catatan (opsional)..."
+                            value={notes}
+                            onChange={(e) => setNotes(e.target.value)}
+                        />
+
                         <div className="flex gap-3">
                             <button
                                 className="btn btn-success flex-1 whitespace-nowrap"

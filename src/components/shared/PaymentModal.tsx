@@ -229,7 +229,7 @@ function StepConfirm({ order, file }: { order: Order; file: File | null }) {
 
 // ─── main ─────────────────────────────────────────────────────────────────────
 
-export function PaymentModal({ order, qrisUrl = "/qris.png", isLoading = false, onSubmit, onClose }: Props) {
+export function PaymentModal({ order, qrisUrl = "/qris.jpeg", isLoading = false, onSubmit, onClose }: Props) {
     const [step, setStep] = useState<1 | 2 | 3>(1)
     const [file, setFile] = useState<File | null>(null)
 

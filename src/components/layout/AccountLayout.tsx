@@ -1,6 +1,6 @@
 import { Outlet, NavLink, useNavigate } from "react-router";
 import Navbar from "../shared/Navbar";
-import { Receipt, Star, ShoppingCart, LogOut, Wrench } from "lucide-react";
+import { Receipt, Star, LogOut, Wrench } from "lucide-react";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../store/store";
 import { logout } from "../../store/slieces/authslice";

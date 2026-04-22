@@ -73,7 +73,7 @@ export default function SearchPage() {
                             <Search size={15} className="text-base-content/40 shrink-0" />
                             <input
                                 type="text"
-                                className="grow text-sm"
+                                className="grow text-sm h-12"
                                 placeholder="Cari nama produk... (Enter untuk cari)"
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
@@ -95,7 +95,6 @@ export default function SearchPage() {
                         </select>
                     </div>
 
-                    {/* Active filters */}
                     {(qParam || cParam) && (
                         <div className="flex items-center justify-between mt-3 pt-3 border-t border-base-200">
                             <div className="flex items-center gap-1.5 flex-wrap">

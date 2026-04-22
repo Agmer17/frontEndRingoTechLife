@@ -265,6 +265,51 @@ export default function ServiceRequestDetailComponent({ data, loading, isAdmin =
                         </div>
                     </div>
 
+                    {/* ── 00: User Info ───────────────── */}
+                    {data.user && (
+                        <>
+                            <SectionHeader step="00" title="Informasi Pembeli" />
+
+                            <div className="px-6 py-6">
+                                <div className="flex items-center gap-4">
+
+                                    {data.user.profile_picture ? (
+                                        <img
+                                            src={`${import.meta.env.VITE_IMAGE_URL}/user/${data.user.profile_picture}`}
+                                            alt={data.user.full_name}
+                                            className="w-12 h-12 object-cover border border-black shrink-0"
+                                        />
+                                    ) : (
+                                        <div className="w-12 h-12 border border-black bg-base-200 flex items-center justify-center text-sm font-bold text-primary/50 shrink-0 uppercase">
+                                            {data.user.full_name?.charAt(0) ?? "?"}
+                                        </div>
+                                    )}
+
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-sm font-semibold truncate">
+                                            {data.user.full_name}
+                                        </p>
+                                        <p className="text-xs text-primary/50 truncate">
+                                            {data.user.email}
+                                        </p>
+                                        {data.user.phone_number && (
+                                            <p className="text-xs text-primary/50 mt-0.5">
+                                                {data.user.phone_number}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <div className="text-xs border border-black px-2 py-0.5 font-mono shrink-0">
+                                        {data.user.role}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </>
+                    )}
+
+                    {/* ── 01: Device Info ───────────────── */}
+
                     {/* ── 02: Problem ───────────────── */}
                     <SectionHeader step="02" title="Deskripsi Masalah" />
 

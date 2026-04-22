@@ -49,11 +49,11 @@ function CardImageCarousel({
     }
 
     return (
-        <div className="relative aspect-square w-full bg-base-200">
+        <div className="relative w-full pt-[100%] bg-base-200">
             <img
                 src={`${IMAGE_BASE}${sorted[currentIndex].image_url}`}
                 alt={`${productName} - ${currentIndex + 1}`}
-                className="w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover"
             />
 
             {sorted.length > 1 && (

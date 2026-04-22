@@ -1,4 +1,5 @@
 import type { Payment } from "./payment"
+import type { User } from "./user"
 
 export type OrderStatus =
     | "pending"
@@ -43,6 +44,7 @@ export interface Order {
 
     items?: OrderItem[]
     payment?: Payment | null
+    user: User
 }
 
 export interface OrderResponse {
